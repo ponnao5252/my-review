@@ -14,34 +14,36 @@
       <v-container fluid>
         <v-row dense>
           <v-col
-            v-for="card in $store.state.cards"
+            v-for="card in newest"
             :key="card.id"
             :cols="12"
             v-ripple="{ center: true }"
           >
-            <v-card @click="toEdit">
-              <v-img
-                :src="card.src"
-                class="white--text"
-                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                height="150px"
-              >
-                <v-card-title v-text="card.store"></v-card-title>
-                <v-card-text v-text="card.brand"></v-card-text>
-              </v-img>
+            <router-link :to="{ name: 'Edit', params: { id: card.id } }">
+              <v-card>
+                <v-img
+                  :src="card.src"
+                  class="white--text"
+                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                  height="150px"
+                >
+                  <v-card-title v-text="card.store"></v-card-title>
+                  <v-card-text v-text="card.brand"></v-card-text>
+                </v-img>
 
-              <v-card-actions>
-                <v-spacer></v-spacer>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
 
-                <v-btn icon>
-                  <v-icon>mdi-heart</v-icon>
-                </v-btn>
+                  <v-btn icon>
+                    <v-icon>mdi-heart</v-icon>
+                  </v-btn>
 
-                <v-btn icon>
-                  <v-icon>mdi-share-variant</v-icon>
-                </v-btn>
-              </v-card-actions>
-            </v-card>
+                  <v-btn icon>
+                    <v-icon>mdi-share-variant</v-icon>
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </router-link>
           </v-col>
         </v-row>
       </v-container>
@@ -57,13 +59,10 @@ export default {
 
   computed: {
     isShowCard() {
-     return this.$store.state.cards.length != 0
-    }
-  },
-
-  methods: {
-    toEdit() {
-      this.$router.push("/edit", () => {});
+      return this.$store.state.cards.length != 0;
+    },
+    newest() {
+      return this.$store.state.cards;
     },
   },
 };

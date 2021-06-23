@@ -19,8 +19,8 @@
             :cols="12"
             v-ripple="{ center: true }"
           >
-            <router-link :to="{ name: 'Edit', params: { id: card.id } }">
-              <v-card>
+            <v-card>
+              <router-link :to="{ name: 'Edit', params: { id: card.id } }">
                 <v-img
                   :src="card.src"
                   class="white--text"
@@ -30,26 +30,31 @@
                   <v-card-title v-text="card.store"></v-card-title>
                   <v-card-text v-text="card.brand"></v-card-text>
                 </v-img>
-
                 <v-card-actions>
                   <v-spacer></v-spacer>
 
                   <v-btn icon>
-                    <v-icon>mdi-heart</v-icon>
+                    <v-icon @click="changeFavorite(card.id)">mdi-heart</v-icon>
                   </v-btn>
 
                   <v-btn icon>
                     <v-icon>mdi-share-variant</v-icon>
                   </v-btn>
                 </v-card-actions>
-              </v-card>
-            </router-link>
+              </router-link>
+            </v-card>
           </v-col>
         </v-row>
       </v-container>
     </v-card>
   </div>
 </template>
+
+<style>
+div a {
+  text-decoration: none;
+}
+</style>
 
 <script>
 export default {
@@ -64,6 +69,14 @@ export default {
     newest() {
       return this.$store.state.cards;
     },
+
   },
+  methods: {
+    changeFavorite(id) {
+      console.log(id);
+    }
+  }
+
+
 };
 </script>

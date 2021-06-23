@@ -11,6 +11,8 @@ export default new Vuex.Store({
         store: 111,
         brand: "test",
         memo: "aaa",
+        favorite: false,
+        src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
       },
     ],
   },
@@ -30,6 +32,10 @@ export default new Vuex.Store({
       x.store = updateData.store;
       x.brand = updateData.brand;
       x.memo = updateData.memo;
+    },
+    changeFavoriteFlg(state, data) {
+      let x = state.cards.find((card) => (card.id = data.id));
+      x.favorite = !data.favorite;
     },
   },
   actions: {},

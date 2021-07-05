@@ -11,10 +11,10 @@ export default new Vuex.Store({
         store: 111,
         brand: "test",
         memo: "aaa",
-        favorite: false,
         src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
       },
     ],
+    favoriteList: [],
   },
   mutations: {
     addData(state, data) {
@@ -33,9 +33,8 @@ export default new Vuex.Store({
       x.brand = updateData.brand;
       x.memo = updateData.memo;
     },
-    changeFavoriteFlg(state, data) {
-      let x = state.cards.find((card) => (card.id = data.id));
-      x.favorite = !data.favorite;
+    addFavorite(state, id) {
+      state.favoriteList.push(id);
     },
   },
   actions: {},

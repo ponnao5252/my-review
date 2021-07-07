@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     save() {
-      this.$store.commit("update", {
+      this.$store.dispatch("update", {
         id: this.$route.params.id,
         store: this.cardStore,
         brand: this.cardBrand,

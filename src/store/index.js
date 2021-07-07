@@ -16,15 +16,16 @@ export default new Vuex.Store({
     ],
     favoriteList: [],
   },
+  getters: {
+    cardsLength: state => state.cards.length,
+    cards: state => state.cards,
+    favoriteListLength: state => state.favoriteList.length,
+    favoriteList: state => state.favoriteList
+  },
   mutations: {
     addData(state, data) {
       // Home画面に追加
-      if (state.cards.length == 0) {
-        data.id = 1;
-      } else {
-        let max = state.cards[state.cards.length - 1].id;
-        data.id = max + 1;
-      }
+
       state.cards.push(data);
     },
     update(state, updateData) {
@@ -34,9 +35,25 @@ export default new Vuex.Store({
       x.memo = updateData.memo;
     },
     addFavorite(state, id) {
-      state.favoriteList.push(id);
+      if (state.favoriteList.length == 0) {
+        state.favoriteList.push(id);
+      } else if (state.favoriteList.includes(id)) {
+        state.favoriteList = state.favoriteList.filter(item => item !== id);
+      } else {
+        state.favoriteList.push(id);
+      }
     },
   },
-  actions: {},
+  actions: {
+    addFavorite(context, id) {
+      context.commit("addFavorite", id);
+    },
+    addData(context, data) {
+      context.commit("addData", data);
+    },
+    update(context, upDatedata) {
+      context.commit("update", upDatedata);
+    }
+  },
   modules: {},
 });

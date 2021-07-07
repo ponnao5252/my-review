@@ -66,33 +66,26 @@ div a {
 export default {
   data: () => ({
     search: "",
-    favoriteState: false,
   }),
 
   computed: {
     isShowCard() {
-      return this.$store.state.cards.length != 0;
+      return this.$store.getters.cardsLength != 0;
     },
     newest() {
-      return this.$store.state.cards;
+      return this.$store.getters.cards;
     },
   },
 
   methods: {
     addFavorite(id) {
-      if (this.$store.state.favoriteList.length == 0) {
-        this.$store.commit("addFavorite", id);
-      } else if (this.$store.state.favoriteList.includes(id)) {
-        this.$store.state.favoriteList = this.$store.state.favoriteList.filter(item => item !== id);
-      } else {
-        this.$store.commit("addFavorite", id);
-      }
+      this.$store.dispatch("addFavorite", id);
     },
     isFavoriteActive(id) {
-      if (this.$store.state.favoriteList.length == 0) {
+      if (this.$store.getters.favoriteListLength == 0) {
         return false;
       } else {
-        return this.$store.state.favoriteList.includes(id);
+        return this.$store.getters.favoriteList.includes(id);
       }
     },
     toEdit(id) {

@@ -50,7 +50,7 @@ export default {
       if (this.store === "") {
         alert("購入店を入力してください");
       } else {
-        this.$store.commit("addData", {
+        this.$store.dispatch("addData", {
           store: this.store,
           brand: this.brand,
           memo: this.memo,

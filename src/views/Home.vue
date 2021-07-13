@@ -63,9 +63,14 @@ div a {
 </style>
 
 <script>
+
+// import firestore from '../firebase/firestore'
+// const dataRef = firestore.collection('cards')
+
 export default {
   data: () => ({
     search: "",
+    obj: {}
   }),
 
   computed: {
@@ -73,8 +78,13 @@ export default {
       return this.$store.getters.cardsLength != 0;
     },
     newest() {
+      // console.log(this.$store.getters.cards)
       return this.$store.getters.cards;
     },
+  },
+  created() {
+    this.clear();
+    this.start();
   },
 
   methods: {
@@ -91,6 +101,12 @@ export default {
     toEdit(id) {
       this.$router.push("/edit/" + id);
     },
+    start() {
+      this.$store.dispatch("startListner")
+    },
+    clear() {
+      this.$store.dispatch("clearState")
+    }
   },
 };
 </script>

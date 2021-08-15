@@ -5,6 +5,8 @@ import New from "../views/New.vue";
 import Edit from "../views/Edit.vue";
 import About from "../views/About.vue";
 import Set from "../views/Set.vue";
+import Signup from "../views/Signup.vue";
+import Signin from "../views/Signin.vue";
 
 Vue.use(VueRouter);
 
@@ -35,6 +37,16 @@ export default new VueRouter({
       path: "/set",
       // name: 'New',
       component: Set,
+    },
+    {
+      path: "/signup",
+      // name: 'New',
+      component: Signup,
+    },
+    {
+      path: "/signin",
+      // name: 'New',
+      component: Signin,
     },
   ],
 });

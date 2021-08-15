@@ -1,55 +1,39 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import firestore from '../firebase/firestore'
+import firebase from "../firebase/firestore";
 import router from "@/router/index";
-
-const dataRef = firestore.collection('cards')
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    cards: [
-      // {
-      //   id: 1,
-      //   store: 111,
-      //   brand: "test",
-      //   memo: "aaa",
-      //   src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
-      // },
-    ],
+    cards: [],
     favoriteList: [],
+    loginUser: [],
   },
   getters: {
-    cardsLength: state => state.cards.length,
-    cards: state => state.cards.sort((a,b) => {
-      return a.id - b.id
-    }),
-    favoriteListLength: state => state.favoriteList.length,
-    favoriteList: state => state.favoriteList
+    cardsLength: (state) => state.cards.length,
+    cards: (state) =>
+      state.cards.sort((a, b) => {
+        return a.id - b.id;
+      }),
+    favoriteListLength: (state) => state.favoriteList.length,
+    favoriteList: (state) => state.favoriteList,
+    userName: (state) => state.loginUser.userName,
   },
   mutations: {
     addData(state, data) {
-      dataRef.add(data)
+      // firebase.dataRef.add(data);
+      firebase.userRef
+        .doc(state.loginUser.userUid)
+        .collection("cards")
+        .add(data);
     },
-    // update(state, updateData) {
-    // dataRef.get().then((snapshot) => {
-    //     snapshot.forEach(doc => {
-    //       if(doc.data().id == updateData.id) {
-    //         dataRef.doc(doc.id).update({
-    //           store: updateData.store,
-    //           brand: updateData.brand,
-    //           memo: updateData.memo
-    //         })
-    //       }
-    //     })
-    //   })
-    // },
     addFavorite(state, id) {
       if (state.favoriteList.length == 0) {
         state.favoriteList.push(id);
       } else if (state.favoriteList.includes(id)) {
-        state.favoriteList = state.favoriteList.filter(item => item !== id);
+        state.favoriteList = state.favoriteList.filter((item) => item !== id);
       } else {
         state.favoriteList.push(id);
       }
@@ -59,7 +43,13 @@ export default new Vuex.Store({
     },
     clearState(state) {
       state.cards = [];
-    }
+    },
+    addLoginUser(state, userData) {
+      state.loginUser = userData;
+    },
+    searchUserNameAndLogin(state, userData) {
+      state.loginUser = userData;
+    },
   },
   actions: {
     addFavorite(context, id) {
@@ -74,30 +64,58 @@ export default new Vuex.Store({
       }
       context.commit("addData", data);
     },
-    update(context,upDateData) {
-      dataRef.get().then((snapshot) => {
-        snapshot.forEach(doc => {
-          if(doc.data().id == upDateData.id) {
-            dataRef.doc(doc.id).update({
-              store: upDateData.store,
-              brand: upDateData.brand,
-              memo: upDateData.memo
-            })
-          }
-        })
-        router.push("/");
-      })
+    update(context, upDateData) {
+      firebase.userRef
+        .doc(this.state.loginUser.userUid)
+        .collection("cards")
+        .get()
+        .then((snapshot) => {
+          snapshot.forEach((doc) => {
+            if (doc.data().id == upDateData.id) {
+              firebase.userRef
+                .doc(this.state.loginUser.userUid)
+                .collection("cards")
+                .doc(doc.id)
+                .update({
+                  store: upDateData.store,
+                  brand: upDateData.brand,
+                  memo: upDateData.memo,
+                });
+            }
+          });
+          router.push("/");
+        });
     },
     clearState(context) {
       context.commit("clearState");
     },
-    startListner({commit}) {
-      dataRef.get().then((snapshot) => {
-        snapshot.forEach(doc => {
-          commit('setState', doc.data())
-        })
-      })
-    }
+    startListner({ commit }) {
+      // ログインしているユーザーのデータを表示するようにする
+      firebase.userRef
+        .doc(this.state.loginUser.userUid)
+        .collection("cards")
+        .get()
+        .then((snapshot) => {
+          snapshot.forEach((doc) => {
+            commit("setState", doc.data());
+          });
+        });
+    },
+    addLoginUser(context, userData) {
+      context.commit("addLoginUser", userData);
+    },
+    searchUserNameAndLogin(context, userUid) {
+      firebase.userRef
+        .doc(userUid)
+        .get()
+        .then((userName) => {
+          context.commit("addLoginUser", {
+            userName: userName.data().user,
+            userUid: userUid,
+          });
+          router.push("/");
+        });
+    },
   },
   modules: {},
 });

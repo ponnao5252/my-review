@@ -83,6 +83,8 @@ export default {
     },
   },
   created() {
+    // firestore.test();
+    // console.log(firestore);
     this.clear();
     this.start();
   },

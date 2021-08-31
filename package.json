@@ -10,6 +10,7 @@
   "dependencies": {
     "core-js": "^2.6.12",
     "firebase": "^8.7.1",
+    "firebaseui": "^5.0.0",
     "vue": "^2.6.13",
     "vue-router": "^3.5.1",
     "vuetify": "^2.5.3",

@@ -6,7 +6,8 @@
 
 <script>
 import * as firebaseui from "firebaseui";
-import firestore from "../firebase/firestore";
+import firebase from "../firebase/firestore";
+firebaseui = require("firebaseui-ja")
 require("firebaseui/dist/firebaseui.css");
 
 export default {
@@ -18,12 +19,13 @@ export default {
                 // console.log(currentUser.user.uid)
             }
             },
-            signInSuccessUrl: "/",
-            signInOptions: [firestore.firebase.auth.EmailAuthProvider.PROVIDER_ID],
+            // signInSuccessUrl: "/",
+            signInOptions: [firebase.firebase.auth.EmailAuthProvider.PROVIDER_ID],
     };
-    let ui = new firebaseui.auth.AuthUI(firestore.firebase.auth());
+
+
+    let ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.firebase.auth());
     ui.start("#firebaseui-auth-container", uiConfig);
-    console.log()
   },
 };
 </script>

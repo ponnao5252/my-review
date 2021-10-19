@@ -63,14 +63,13 @@ div a {
 </style>
 
 <script>
-
-// import firestore from '../firebase/firestore'
+// import firebase from "../firebase/firestore";
 // const dataRef = firestore.collection('cards')
 
 export default {
   data: () => ({
     search: "",
-    obj: {}
+    obj: {},
   }),
 
   computed: {
@@ -78,13 +77,33 @@ export default {
       return this.$store.getters.cardsLength != 0;
     },
     newest() {
-      // console.log(this.$store.getters.cards)
       return this.$store.getters.cards;
     },
   },
   created() {
     // firestore.test();
-    // console.log(firestore);
+    // // console.log(firestore);
+    // console.log("f");
+    // firebase.firebase.auth().onAuthStateChanged((user) => {
+    //   // if(user.uid !== null) {
+    //   //   this.start();
+    //   // }
+
+    //   //   this.clear();
+    //   //   if (this.$store.state.loginFlg !== 1) {
+    //   //     this.$store.dispatch("reloadLogin", user.uid);
+    //   //     console.log("aa")
+    //   //     // this.start();
+    //   console.log("aaa");
+    //   console.log(user.uid);
+    // });
+    //   }else if (user){
+    //     this.start();
+    //     console.log("b")
+    //   }
+    // }
+    // )
+    // ;
     this.clear();
     this.start();
   },
@@ -104,11 +123,11 @@ export default {
       this.$router.push("/edit/" + id);
     },
     start() {
-      this.$store.dispatch("startListner")
+      this.$store.dispatch("startListner");
     },
     clear() {
-      this.$store.dispatch("clearState")
-    }
+      this.$store.dispatch("clearCards");
+    },
   },
 };
 </script>

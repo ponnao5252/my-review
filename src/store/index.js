@@ -10,6 +10,7 @@ export default new Vuex.Store({
     cards: [],
     favoriteList: [],
     loginUser: [],
+    loginFlg: "",
   },
   getters: {
     cardsLength: (state) => state.cards.length,
@@ -43,9 +44,15 @@ export default new Vuex.Store({
     },
     clearState(state) {
       state.cards = [];
+      state.favoriteList = [];
+      state.loginUser = [];
+    },
+    clearCards(state) {
+      state.cards = [];
     },
     addLoginUser(state, userData) {
       state.loginUser = userData;
+      state.loginFlg = 1;
     },
     searchUserNameAndLogin(state, userData) {
       state.loginUser = userData;
@@ -83,11 +90,16 @@ export default new Vuex.Store({
                 });
             }
           });
-          router.push("/");
         });
+        // router.push("/");
     },
+        // ログアウトしたら全ての情報を空にする
     clearState(context) {
       context.commit("clearState");
+    },
+
+    clearCards(context) {
+      context.commit("clearCards");
     },
     startListner({ commit }) {
       // ログインしているユーザーのデータを表示するようにする
@@ -105,6 +117,34 @@ export default new Vuex.Store({
       context.commit("addLoginUser", userData);
     },
     searchUserNameAndLogin(context, userUid) {
+      console.log("d")
+      firebase.userRef
+        .doc(userUid)
+        .get()
+        // .then((userName) => {
+        //   context.commit("addLoginUser", {
+        //     userName: userName.data().user,
+        //     userUid: userUid,
+        //   });
+        //   // this.dispatch("startListner");
+        //   console.log("c")
+        //   router.push("/")
+        //   console.log("E")
+        // },
+        // 元々の方
+        .then((userName) => {
+          context.commit("addLoginUser", {
+            userName: userName.data().user,
+            userUid: userUid,
+          });
+          // this.dispatch("startListner");
+          console.log("c")
+          router.push("/")
+          console.log("E")
+        },
+        );
+    },
+    reloadLogin(context, userUid) {
       firebase.userRef
         .doc(userUid)
         .get()
@@ -113,7 +153,9 @@ export default new Vuex.Store({
             userName: userName.data().user,
             userUid: userUid,
           });
-          router.push("/");
+          this.dispatch("startListner");
+          console.log("test")
+          // router.push("/")
         });
     },
   },

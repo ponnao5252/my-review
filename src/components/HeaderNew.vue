@@ -27,6 +27,14 @@
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item @click.stop="dialog = true" v-if="isLogin">
+            <v-list-item-icon>
+              <v-icon>mdi-logout</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Logout</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
       </v-navigation-drawer>
 
@@ -46,7 +54,30 @@
 
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       </v-app-bar>
+      <!-- ログアウトダイアログ -->
+      <v-dialog v-model="dialog" max-width="290">
+        <v-card>
+          <v-card-title class="headline">ログアウトしますか？</v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
 
+            <v-btn
+              color="green darken-1"
+              text
+              @click="
+                dialog = false;
+                logout();
+              "
+            >
+              ログアウト
+            </v-btn>
+
+            <v-btn color="green darken-1" text @click="dialog = false">
+              キャンセル
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <v-main>
         <router-view></router-view>
       </v-main>
@@ -54,7 +85,14 @@
   </div>
 </template>
 
+<style scoped>
+.headline {
+  font-size: 5px;
+}
+</style>
+
 <script>
+import firebase from "../firebase/firestore";
 export default {
   name: "HeaderNew",
   data: () => ({
@@ -72,17 +110,20 @@ export default {
       { title: "New", icon: "mdi-plus-thick", to: "/new", pattern: 2 },
       { title: "About", icon: "mdi-help-box", to: "/about" },
       { title: "Setting", icon: "mdi-cog-outline", to: "/set", pattern: 2 },
-      { title: "Logout", icon: "mdi-logout", to: "/signin", pattern: 2 },
     ],
     userName: "test",
+    dialog: false,
   }),
   computed: {
     selectedItems() {
-      this.changePattern()
+      this.changePattern();
       return this.items.filter((item) => item.pattern === this.selectedPattern);
     },
     name() {
       return this.$store.getters.userName;
+    },
+    isLogin() {
+      return this.selectedPattern == 2;
     },
   },
   methods: {
@@ -96,6 +137,16 @@ export default {
       if (this.$store.getters.userName !== undefined) {
         this.selectedPattern = 2;
       }
+    },
+    logout() {
+      firebase.firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$store.dispatch("clearState");
+          this.selectedPattern = 1;
+          this.$router.push("/", () => {});
+        });
     },
   },
 };

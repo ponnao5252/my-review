@@ -15,21 +15,23 @@ var firebaseConfig = {
   measurementId: "G-9SPJZKLHP5",
 };
 // Initialize Firebase
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-const firestore = firebaseApp.firestore();
-const auth = firebaseApp.auth();
-const test = () => {
-  console.log("test");
-};
+firebase.initializeApp(firebaseConfig);
+// firebase.analytics();
+// const firestore = firebase.firestore();
+// const auth = firebase.auth();
+// const test = () => {
+//   console.log("test");
+// };
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
 
-const dataRef = firestore.collection("cards");
-const userRef = firestore.collection("users");
+const dataRef = firebase.firestore().collection("cards");
+const userRef = firebase.firestore().collection("users");
 
 export default {
   firebase,
-  firestore,
-  auth,
+  // firestore,
+  // auth,
   dataRef,
   userRef,
-  test,
+  // test,
 };

@@ -55,7 +55,7 @@ export default {
         brand: this.cardBrand,
         memo: this.cardMemo,
       });
-      this.$router.push("/");
+      // this.$router.push("/");
     },
   },
 };

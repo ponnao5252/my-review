@@ -90,8 +90,8 @@ export default new Vuex.Store({
                 });
             }
           });
+          router.push("/");
         });
-        // router.push("/");
     },
         // ログアウトしたら全ての情報を空にする
     clearState(context) {

@@ -36,7 +36,7 @@
                 <v-btn icon>
                   <v-icon
                     @click="addFavorite(card.id)"
-                    v-if="isFavoriteActive(card.id)"
+                    v-if="card.favorite"
                     color="red"
                     >mdi-heart</v-icon
                   >
@@ -63,7 +63,7 @@ div a {
 </style>
 
 <script>
-// import firebase from "../firebase/firestore";
+import firebase from "../firebase/firestore";
 // const dataRef = firestore.collection('cards')
 
 export default {
@@ -81,31 +81,19 @@ export default {
     },
   },
   created() {
-    // firestore.test();
-    // // console.log(firestore);
-    // console.log("f");
-    // firebase.firebase.auth().onAuthStateChanged((user) => {
-    //   // if(user.uid !== null) {
-    //   //   this.start();
-    //   // }
-
-    //   //   this.clear();
-    //   //   if (this.$store.state.loginFlg !== 1) {
-    //   //     this.$store.dispatch("reloadLogin", user.uid);
-    //   //     console.log("aa")
-    //   //     // this.start();
-    //   console.log("aaa");
-    //   console.log(user.uid);
-    // });
-    //   }else if (user){
-    //     this.start();
-    //     console.log("b")
-    //   }
-    // }
-    // )
-    // ;
-    this.clear();
-    this.start();
+    if (this.$store.getters.userName !== undefined) {
+      this.clear();
+      {
+        firebase.firebase.auth().onAuthStateChanged((user) => {
+          if (this.$store.getters.loginFlg == 0) {
+            this.$store.dispatch("reloadLogin", user.uid);
+          } else {
+            this.start();
+          }
+        });
+      }
+      this.$store.dispatch("loginFlgChange0");
+    }
   },
 
   methods: {

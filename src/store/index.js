@@ -21,6 +21,7 @@ export default new Vuex.Store({
     favoriteListLength: (state) => state.favoriteList.length,
     favoriteList: (state) => state.favoriteList,
     userName: (state) => state.loginUser.userName,
+    loginFlg: (state) => state.loginFlg,
   },
   mutations: {
     addData(state, data) {
@@ -38,6 +39,7 @@ export default new Vuex.Store({
       } else {
         state.favoriteList.push(id);
       }
+
     },
     setState(state, data) {
       state.cards.push(data);
@@ -52,15 +54,64 @@ export default new Vuex.Store({
     },
     addLoginUser(state, userData) {
       state.loginUser = userData;
+    },
+    loginFlgChange1(state) {
       state.loginFlg = 1;
+    },
+    loginFlgChange0(state) {
+      state.loginFlg = 0;
     },
     searchUserNameAndLogin(state, userData) {
       state.loginUser = userData;
     },
+    changeFavoriteFlg(state, id) {
+      // idが一致するfavoriteフラグを変更する
+      for (let i = 0; i < state.cards.length; i++) {
+        if (state.cards[i].id === id) {
+          if (state.cards[i].favorite) {
+            state.cards[i].favorite = false;
+          } else {
+            state.cards[i].favorite = true;
+          }
+        }
+      }
+    },
   },
   actions: {
     addFavorite(context, id) {
-      context.commit("addFavorite", id);
+      firebase.userRef
+        .doc(this.state.loginUser.userUid)
+        .collection("cards")
+        .get()
+        .then((snapshot) => {
+          snapshot.forEach((doc) => {
+            if (doc.data().id === id) {
+              if (
+                firebase.userRef
+                  .doc(this.state.loginUser.userUid)
+                  .collection("cards")
+                  .doc(doc.favorite) === false
+              ) {
+                firebase.userRef
+                  .doc(this.state.loginUser.userUid)
+                  .collection("cards")
+                  .doc(doc.id)
+                  .update({
+                    favorite: true,
+                  });
+              } else {
+                firebase.userRef
+                  .doc(this.state.loginUser.userUid)
+                  .collection("cards")
+                  .doc(doc.id)
+                  .update({
+                    favorite: false,
+                  });
+              }
+              context.commit("changeFavoriteFlg", id);
+            }
+          });
+        });
     },
     addData(context, data) {
       if (this.state.cards.length == 0) {
@@ -93,7 +144,7 @@ export default new Vuex.Store({
           router.push("/");
         });
     },
-        // ログアウトしたら全ての情報を空にする
+    // ログアウトしたら全ての情報を空にする
     clearState(context) {
       context.commit("clearState");
     },
@@ -117,32 +168,17 @@ export default new Vuex.Store({
       context.commit("addLoginUser", userData);
     },
     searchUserNameAndLogin(context, userUid) {
-      console.log("d")
+      context.commit("loginFlgChange1");
       firebase.userRef
         .doc(userUid)
         .get()
-        // .then((userName) => {
-        //   context.commit("addLoginUser", {
-        //     userName: userName.data().user,
-        //     userUid: userUid,
-        //   });
-        //   // this.dispatch("startListner");
-        //   console.log("c")
-        //   router.push("/")
-        //   console.log("E")
-        // },
-        // 元々の方
         .then((userName) => {
           context.commit("addLoginUser", {
             userName: userName.data().user,
             userUid: userUid,
           });
-          // this.dispatch("startListner");
-          console.log("c")
-          router.push("/")
-          console.log("E")
-        },
-        );
+          router.push("/");
+        });
     },
     reloadLogin(context, userUid) {
       firebase.userRef
@@ -154,9 +190,13 @@ export default new Vuex.Store({
             userUid: userUid,
           });
           this.dispatch("startListner");
-          console.log("test")
-          // router.push("/")
         });
+    },
+    loginFlgChange0(context) {
+      context.commit("loginFlgChange0");
+    },
+    loginFlgChange1(context) {
+      context.commit("loginFlgChange1");
     },
   },
   modules: {},

@@ -81,19 +81,17 @@ export default {
     },
   },
   created() {
-    if (this.$store.getters.userName !== undefined) {
-      this.clear();
-      {
-        firebase.firebase.auth().onAuthStateChanged((user) => {
-          if (this.$store.getters.loginFlg == 0) {
-            this.$store.dispatch("reloadLogin", user.uid);
-          } else {
-            this.start();
-          }
-        });
-      }
-      this.$store.dispatch("loginFlgChange0");
+    this.clear();
+    {
+      firebase.firebase.auth().onAuthStateChanged((user) => {
+        if (this.$store.getters.loginFlg == 0) {
+          this.$store.dispatch("reloadLogin", user.uid);
+        } else {
+          this.start();
+        }
+      });
     }
+    this.$store.dispatch("loginFlgChange0");
   },
 
   methods: {

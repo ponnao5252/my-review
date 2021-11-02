@@ -15,9 +15,7 @@ export default {
     let uiConfig = {
         callbacks: {
             signInSuccessWithAuthResult: (currentUser) => {
-                this.$store.dispatch('searchUserNameAndLogin',currentUser.user.uid);
-                // this.$store.dispatch('reloadLogin',currentUser.user.uid);
-                // console.log(currentUser.user.uid)
+                this.$store.dispatch('searchUserNameAndLogin',currentUser);
             }
             },
             // signInSuccessUrl: "/",

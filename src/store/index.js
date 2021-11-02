@@ -167,16 +167,30 @@ export default new Vuex.Store({
     addLoginUser(context, userData) {
       context.commit("addLoginUser", userData);
     },
-    searchUserNameAndLogin(context, userUid) {
+    searchUserNameAndLogin(context, currentUser) {
       context.commit("loginFlgChange1");
       firebase.userRef
-        .doc(userUid)
+        .doc(currentUser.user.uid)
         .get()
         .then((userName) => {
-          context.commit("addLoginUser", {
-            userName: userName.data().user,
-            userUid: userUid,
-          });
+          // usernameが存在しなかったら新規登録
+          if (userName.exists) {
+            context.commit("addLoginUser", {
+              userName: userName.data().user,
+              userUid: currentUser.user.uid,
+            });
+          } else {
+            // 新規登録処理
+            firebase.userRef
+            .doc(currentUser.user.uid)
+            .set({
+              user: currentUser.user.displayName,
+            })
+            context.commit("addLoginUser", {
+              userName: currentUser.user.displayNam,
+              userUid: currentUser.user.uid,
+            });
+          }
           router.push("/");
         });
     },

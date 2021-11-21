@@ -45,7 +45,7 @@
         </v-btn>
         <div v-ripple="{ center: true }">
           <v-toolbar-title
-            style="font-size: 25px; width: 250px; border-radius: 30px"
+            style="font-size: 25px; width: 250px; border-radius: 30px "
             @click="toHome"
             >Coffee List</v-toolbar-title
           >

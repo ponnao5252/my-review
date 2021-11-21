@@ -138,6 +138,7 @@ export default new Vuex.Store({
                   store: upDateData.store,
                   brand: upDateData.brand,
                   memo: upDateData.memo,
+                  rate: upDateData.rate
                 });
             }
           });

@@ -2,11 +2,7 @@
   <div>
     <!-- 検索 -->
     <v-toolbar flat color="transparent" class="pt-4">
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-      ></v-text-field>
+      <v-text-field v-model="search" label="Search"></v-text-field>
     </v-toolbar>
 
     <!-- アイテム -->
@@ -27,8 +23,10 @@
                 height="150px"
                 @click="toEdit(card.id)"
               >
-                <v-card-title v-text="card.store"></v-card-title>
-                <v-card-text v-text="card.brand"></v-card-text>
+                <v-card-title style="font-weight: bold">{{
+                  card.store
+                }}</v-card-title>
+                <v-card-text>銘柄&ensp;{{ card.brand }}</v-card-text>
               </v-img>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -60,11 +58,14 @@
 div a {
   text-decoration: none;
 }
+.v-application {
+  /* font-family:"Hiragino Sans", Meiryo, sans-serif; */
+  font-family: Georgia, serif;
+}
 </style>
 
 <script>
 import firebase from "../firebase/firestore";
-// const dataRef = firestore.collection('cards')
 
 export default {
   data: () => ({

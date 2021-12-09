@@ -39,7 +39,6 @@ export default new Vuex.Store({
       } else {
         state.favoriteList.push(id);
       }
-
     },
     setState(state, data) {
       state.cards.push(data);
@@ -87,10 +86,7 @@ export default new Vuex.Store({
           snapshot.forEach((doc) => {
             if (doc.data().id === id) {
               if (
-                firebase.userRef
-                  .doc(this.state.loginUser.userUid)
-                  .collection("cards")
-                  .doc(doc.favorite) === false
+                doc.data().favorite === false
               ) {
                 firebase.userRef
                   .doc(this.state.loginUser.userUid)
@@ -138,6 +134,7 @@ export default new Vuex.Store({
                   store: upDateData.store,
                   brand: upDateData.brand,
                   memo: upDateData.memo,
+                  rate: upDateData.rate,
                 });
             }
           });
@@ -181,11 +178,9 @@ export default new Vuex.Store({
             });
           } else {
             // 新規登録処理
-            firebase.userRef
-            .doc(currentUser.user.uid)
-            .set({
+            firebase.userRef.doc(currentUser.user.uid).set({
               user: currentUser.user.displayName,
-            })
+            });
             context.commit("addLoginUser", {
               userName: currentUser.user.displayNam,
               userUid: currentUser.user.uid,

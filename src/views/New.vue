@@ -11,6 +11,19 @@
         <v-col cols="12" sm="6" md="3">
           <v-text-field label="銘柄" dense v-model="brand"></v-text-field>
         </v-col>
+        <!-- レーティング -->
+        <v-col cols="12" sm="6" md="3">
+          総合評価
+          <v-rating
+            background-color="orange lighten-3"
+            color="orange"
+            size="30"
+            hover
+            half-increments
+            half-icon="$ratingHalf"
+            v-model="rate"
+          ></v-rating>
+        </v-col>
         <v-col cols="12" sm="6" md="3">
           <v-textarea
             label="メモ"
@@ -43,12 +56,14 @@ export default {
       "https://cdn.vuetifyjs.com/images/cards/road.jpg",
       "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
     ],
+    rate: "",
   }),
 
   methods: {
     addData() {
       if (this.store === "") {
         alert("購入店を入力してください");
+        console.log(this.rate)
       } else {
         this.$store.dispatch("addData", {
           store: this.store,
@@ -58,6 +73,7 @@ export default {
           src: this.imageList[
             parseInt(Math.floor(Math.random() * this.imageList.length))
           ],
+          rate: this.rate
         });
         // Homeに戻る
         this.$router.push("/", () => {});

@@ -99,12 +99,12 @@ export default {
     drawer: null,
     selectedPattern: 1,
     items: [
-      {
-        title: "New Account",
-        icon: "mdi-account-plus",
-        to: "/signup",
-        pattern: 1,
-      },
+      // {
+      //   title: "New Account",
+      //   icon: "mdi-account-plus",
+      //   to: "/signup",
+      //   pattern: 1,
+      // },
       { title: "Login", icon: "mdi-login", to: "/signin", pattern: 1 },
       { title: "Home", icon: "mdi-home", to: "/", pattern: 2 },
       { title: "New", icon: "mdi-plus-thick", to: "/new", pattern: 2 },
